@@ -1,1 +1,1 @@
-# DjangoImageProcessingBlog
+# DjangoImageProcessingBlog 2.
