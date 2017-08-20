@@ -1,0 +1,164 @@
+<!DOCTYPE html> {% extends 'index.html' %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+
+</head>
+
+<body>
+{% block content %}
+
+    <script type="text/javascript">
+        // <![CDATA[
+        function loader() {
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("ImageProcessing").style.display = "none";
+
+        }//preloader
+        function setDropDown(control) {
+            $("#cmfdDropdown").val(control.text)
+            $("#hdnCmfd").val(control.id)
+        }
+        // ]]>
+    </script>
+    <div class="page-section" id="loading" style="z-index: 1000;display: none;
+    background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;">
+        <table>
+            <tr>
+                <td align="center" style="background-color: black">
+                    <label for="usr" style="text-align: center;width:200px;color: white">Processing...</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="page-section" style="z-index: 1000;background-image:url('/static/loadingimage.gif');
+              background-repeat: no-repeat; height: 100%;;width: 100%;background-size: cover;position: absolute">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="page-section" id="ImageProcessing">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="widget-title">Copy Move Forgery Detection</h4>
+                <p> CMFD aciklamalar. </p>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <form method="post" action="/simple_upload" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="myfile">
+                    <input type="hidden" name="redirect" value="Cmfd">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+                <form action="/Cmfd" method="post">
+                    {% csrf_token %}
+                    <table class="table table-inverse" style="width: 500px;">
+                        <tbody>
+                        <tr>
+                            <td colspan="2">
+                                {% if uploaded_file_url %}
+                                    <input id="your_name" type="text" class="btn btn-primary" name="myfile"
+                                           value="{{ uploaded_file_url }}">                                    {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <!--<td class="col-md-4 col-sm-1">
+                        Extension :
+                    </td>
+                    <td>
+                        <fieldset class="col-md-4 col-sm-3">
+                            <select class="form-control" id="extension" name="extension">
+                                <option>.pdf</option>
+                                <option>.txt</option>
+                            </select>
+                        </fieldset>
+                    </td>-->
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <table></table>
+                                {% if edited_file_url %}
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                Without RANSAC
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="../{{ edited_file_url }}" class="img-rounded">
+                                            </td>
+
+                                        </tr>
+                                    </table>
+
+                                {% endif %}
+                            </td>
+                            <td colspan="2">
+                               {% if edited_file_url2 %}
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                With RANSAC
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="../{{ edited_file_url2 }}" class="img-rounded">
+                                            </td>
+
+                                        </tr>
+                                    </table>
+
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td style="align-self: center">
+                                <br/>
+                                <fieldset class="col-md-12 col-sm-12">
+                                    <input type="submit" class="btn btn-primary" value="Process" onclick="loader()">
+                                </fieldset>
+                            </td>
+                            <td style="text-align:center;vertical-align:bottom">
+                                <li class="dropdown" id="accountmenu">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <input type="button" id="cmfdDropdown"
+                                                           name="cmfdDropdown" value="Methods"> <b
+                                            class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" id="1" onclick="setDropDown(this)">SIFT</a></li>
+                                        <li><a href="#" id="2" onclick="setDropDown(this)">SIFT Corner Detection + DAISY Feature Matcher</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" id="3" onclick="setDropDown(this)">SIFT Corner Detection + SURF </a></li>
+                                        <li><a href="#" id="4" onclick="setDropDown(this)">SIFT Corner Detection + FREAK</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" id="5" onclick="setDropDown(this)">SIFT Corner Detection + CnsLTP</a></li>
+                                    </ul>
+                                </li>
+                                <input type="hidden" id="hdnCmfd" name="hdnCmfd">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+</body>
+
+</html>

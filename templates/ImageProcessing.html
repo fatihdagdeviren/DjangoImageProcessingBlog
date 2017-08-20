@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+
+
+
+    <div class="page-section" id="ImageProcessing">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="widget-title">Image Processing Methods</h4>
+            <p> Image Processing ile ilgili açıklamaları alıcam buraya </p>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <table class="table table-inverse">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Methods</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">Recognition</th>
+                    <td>
+                        <a href="/DigitRec">Digit Recognition</a>,<a href="/HandWritingRec">HandWriting Recognition</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Image Steganography </th>
+                    <td>
+                        <a href="/Cmfd">Copy Move Forgery Detection</a>,
+                    </td>
+                </tr>
+                 <tr>
+                    <th scope="row">Image Retrieval </th>
+                    <td>
+                        <a href="/ImageRetrieval">Image Retrieval with Google Custom Search</a>,
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html> {% extends 'index.html' %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+
+<body>
+    {% block content %}
+
+    <script type="text/javascript">
+        // <![CDATA[
+        function loader() {
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("ImageProcessing").style.display = "none";
+        }//preloader
+
+
+        /**
+             $("#btnPost").click(function (e) {
+                 e.preventDefault();
+                 $.ajax({
+                     type: "GET",
+                     url: "/GetPost",
+                     data: {id: "fatih"},
+                     success: function (result) {
+                         alert(result);
+                     },
+                     error: function (result) {
+                         alert('error');
+                     }
+                 });
+             });
+     
+             **/
+
+        function sendAjaxRequest(element) {
+            var clickedButton = element;
+            if (clickedButton.id == -1) {
+                alert("nabere");
+                return;
+            }
+            $.ajax(
+                {
+                    type: "GET",
+                    url: "/GetPost",
+                    data: { id: clickedButton.id },
+                    success: function (result) {
+                        $("#postContent").val(result.content);
+                        $("#txtPostTitle").val(result.title);
+                        alert(result.title);
+                    },
+                    error: function (result) {
+                        alert('error');
+                    }
+                }
+            );
+        }
+    // ]]>
+    </script>
+
+    <div class="page-section" id="loading" style="z-index: 1000;display: none;
+    background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;">
+
+        <table>
+            <tr>
+                <td align="center" style="background-color: black">
+                    <label for="usr" style="text-align: center;width:200px;color: white">Processing...</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="page-section" style="z-index: 1000;background-image:url('/static/loadingimage.gif');
+              background-repeat: no-repeat; height: 100%;;width: 100%;background-size: cover;position: absolute">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="page-section" id="ImageProcessing">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="widget-title">Welcome {{ authenticatedUser.user_name }}</h4>
+                <p>Post Entry Page for Admin </p>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="row">
+                <form method="post" action="/PostEntry" enctype="multipart/form-data">
+                    {% csrf_token %}                    
+                    <div>
+                        <div>
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Posts
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    {% for post in postList %}
+                                    <li role="presentation"><a role="menuitem" id="{{ post.id }}" name="menu1" onclick="sendAjaxRequest(this)" tabindex="-1">{{ post.title }}</a></li>
+                                    {% endfor %}
+                                    <li role="presentation"><a role="menuitem" id="-1" name="menu1" onclick="sendAjaxRequest(this)" tabindex="-1">New Post</a></li>
+                                </ul>
+                            </div>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td>
+                                        Title :
+                                    </td>
+                                    <td>
+                                        <input type="text" name="txtPostTitle" id="txtPostTitle">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Controller Name :
+                                    </td>
+                                    <td>
+                                        <input type="text" name="txtControllerName" id="txtControllerName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <textarea id="postContent" name="postContent" rows="20" cols="50">
+
+                                     </textarea>
+                                    </td>
+
+                                </tr>
+                            </table>
+
+                            <br/>
+                            <div class="wrapper">
+                                <span class="group-btn">
+                             <input type="submit" class="btn btn-primary" value="Process" onclick="loader()">
+                        </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+
+
+        {% endblock %}
+</body>
+
+</html>
