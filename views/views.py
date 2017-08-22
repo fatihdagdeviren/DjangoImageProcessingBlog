@@ -84,7 +84,6 @@ def cmfd(request):
             method = request.POST.get('hdnCmfd')
             ipAdress = get_client_ip(request)
             # extension  = request.POST.get('extension')
-
             if myfile is not None:
                 myTempFile = statifFilePath + myfile
                 if method == '1' or method is None or method == '':
@@ -97,14 +96,15 @@ def cmfd(request):
                     forgedImage, forgedRansacImage = freak.sift_freak_knn(myTempFile, 0.7, 12)
                 elif method == '5' :
                     forgedImage, forgedRansacImage = ltp.sift_ltp(myTempFile, 15, 0.7, 8,ThresholdForGLCM=None)
-                pathToSave = 'static/Temp/Edited_'+ ipAdress+'_'+str(uuid.uuid4())+'_'+ myfile
-                pathToSaveRANSAC = 'static/Temp/Edited_RANSAC_' + ipAdress + '_' + str(uuid.uuid4()) + '_' + myfile
-                cv2.imwrite(pathToSave, forgedImage)
-                cv2.imwrite(pathToSaveRANSAC, forgedRansacImage)
+                pathToSave = 'static/Temp/Edited_'+str(uuid.uuid4())+'_'+ myfile
+                pathToSaveRANSAC = 'static/Temp/Edited_RANSAC_' + str(uuid.uuid4()) + '_' + myfile
+                methods.saveImageToFile(pathToSave,forgedImage)
+                methods.saveImageToFile(pathToSaveRANSAC,forgedRansacImage)
                 return render(request, 'Cmfd.html', {
                     'uploaded_file_url': myfile, 'edited_file_url': pathToSave,'edited_file_url2': pathToSaveRANSAC
                 })
-        except:
+        except BaseException as e:
+            print(str(e))
             pass
     return render(request, 'Cmfd.html')
 

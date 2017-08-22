@@ -1,15 +1,8 @@
 
-
 import cv2
 from sklearn.externals import joblib
-
 from skimage.feature import hog
-
 import numpy as np
-
-import views.CornerDetectionModule as cdm
-import views.MaxLBPMatcher as mlbp
-from classes.cs_Feature import *
 from sklearn import linear_model
 import json
 import requests
@@ -93,8 +86,6 @@ def findInlierPointsWithRansac(listim):
     except:
         return None
 
-
-
 def getPicturesFromGoogleCustomSearch(word):
     resimList = []
     for start in range(1,50,1):
@@ -148,3 +139,9 @@ def computeMD5hash(string):
     m = hashlib.md5()
     m.update(string.encode('utf-8'))
     return m.hexdigest()
+
+def saveImageToFile(filePath,image):
+    try:
+        cv2.imwrite(filePath,image)
+    except BaseException as e:
+        print(str(e))
