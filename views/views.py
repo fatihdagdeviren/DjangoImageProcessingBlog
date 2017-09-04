@@ -76,8 +76,9 @@ def simple_upload(request):
 
 
 def cmfd(request):
+    cmfdPost = Post.objects.filter(controllerName = 'Cmfd').first()
     if request.method=="GET":
-        return render(request, 'Cmfd.html')
+        return render(request, 'Cmfd.html',{'Post':cmfdPost})
     if request.method=="POST":
         try:
             myfile = request.POST.get('myfile')  # this is my file
@@ -101,7 +102,7 @@ def cmfd(request):
                 methods.saveImageToFile(pathToSave,forgedImage)
                 methods.saveImageToFile(pathToSaveRANSAC,forgedRansacImage)
                 return render(request, 'Cmfd.html', {
-                    'uploaded_file_url': myfile, 'edited_file_url': pathToSave,'edited_file_url2': pathToSaveRANSAC
+                    'uploaded_file_url': myfile, 'edited_file_url': pathToSave,'edited_file_url2': pathToSaveRANSAC,'Post':cmfdPost
                 })
         except BaseException as e:
             print(str(e))
@@ -148,14 +149,17 @@ def ImageRetrieval(request):
 
 @login_required
 def PostEntry(request):
+    postList = list(Post.objects.all())
     if request.method == "GET":
-        postList = list(Post.objects.all())
         return render(request, 'PostEntry.html', {'postList': postList})
     elif request.method == "POST":
         try:
-            p = Post()
+            p = Post.objects.filter(controllerName= request.POST.get('txtControllerName')).first()
+            if p is None:
+                p = Post()
             p.title = request.POST.get('txtPostTitle')
             p.content = request.POST.get('postContent')
+            p.controllerName = request.POST.get('txtControllerName')
             p.lastUpdate = datetime.datetime.now()
             p.save()
         except BaseException as e:
@@ -171,7 +175,7 @@ def GetPost(request):
         postId = request.GET.get('id')
         selectedPost = Post.objects.filter(id = postId).first()
         # JsonResponse(dict(genres=list(Genre.objects.values('name', 'color'))))
-        return JsonResponse({'content':selectedPost.content,'title':selectedPost.title},safe=False)
+        return JsonResponse({'content':selectedPost.content,'title':selectedPost.title,'controllerName':selectedPost.controllerName},safe=False)
 
 
 
