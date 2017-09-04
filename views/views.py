@@ -168,6 +168,7 @@ def PostEntry(request):
         postList = list(Post.objects.all())
         return render(request, 'PostEntry.html', {'postList': postList})
 
+
 @login_required
 def GetPost(request):
     from django.http import JsonResponse
