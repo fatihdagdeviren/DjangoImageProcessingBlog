@@ -66,43 +66,57 @@ def simple_upload(request):
         redirectPage = request.POST.get('redirect')
         fs = FileSystemStorage()
         ipAdress = get_client_ip(request)
-        myfile.name =  ipAdress+'_'+str(uuid.uuid4())+'_'+ myfile.name
+        myfile.name = redirectPage+'_'+ myfile.name
         uploadUrl = 'static/Temp/'+ myfile.name
         filename = fs.save(uploadUrl, myfile)
         uploaded_file_url = fs.url(myfile.name)
-        return render(request, '{}.html'.format(redirectPage), {
-            'uploaded_file_url': uploaded_file_url
-        })
+        try:
+            return render(request, '{}.html'.format(redirectPage), {
+                'uploaded_file_url': uploaded_file_url
+            })
+        except BaseException as e:
+            print(str(e))
+
+def saveImageToUrl(controllerName,myfile):
+    try:
+        fs = FileSystemStorage()
+        uploadUrl = statifFilePath + controllerName +'_'+ myfile.name
+        filename = fs.save(uploadUrl, myfile)
+        return filename
+    except BaseException as e :
+        return None
 
 
 def cmfd(request):
     cmfdPost = Post.objects.filter(controllerName = 'Cmfd').first()
+    cmfdMethods = list(Code.objects.filter(codeGroup=1 , visible=True))
     if request.method=="GET":
-        return render(request, 'Cmfd.html',{'Post':cmfdPost})
-    if request.method=="POST":
+        return render(request, 'Cmfd.html',{'Post':cmfdPost,'CmfdMethods':cmfdMethods})
+    if request.method=="POST" and  request.FILES['input-b1']:
         try:
-            myfile = request.POST.get('myfile')  # this is my file
+            selectedFile = request.FILES['input-b1']
+            myfile = saveImageToUrl('Cmfd',selectedFile)
             method = request.POST.get('hdnCmfd')
             ipAdress = get_client_ip(request)
             # extension  = request.POST.get('extension')
             if myfile is not None:
-                myTempFile = statifFilePath + myfile
-                if method == '1' or method is None or method == '':
+                myTempFile =  myfile
+                if method == '1001' or method is None or method == '':
                     forgedImage,forgedRansacImage = sift.sift_sift_knn(myTempFile,0.7,12)
-                elif method == '2':
+                elif method == '1002':
                     forgedImage,forgedRansacImage = daisy.sift_daisy_knn(myTempFile,0.7,12)
-                elif method == '3' :
+                elif method == '1003' :
                     forgedImage, forgedRansacImage = surf.sift_surf_knn(myTempFile, 0.7, 12)
-                elif method == '4':
+                elif method == '1004':
                     forgedImage, forgedRansacImage = freak.sift_freak_knn(myTempFile, 0.7, 12)
-                elif method == '5' :
+                elif method == '1005' :
                     forgedImage, forgedRansacImage = ltp.sift_ltp(myTempFile, 15, 0.7, 8,ThresholdForGLCM=None)
-                pathToSave = 'static/Temp/Edited_'+str(uuid.uuid4())+'_'+ myfile
-                pathToSaveRANSAC = 'static/Temp/Edited_RANSAC_' + str(uuid.uuid4()) + '_' + myfile
+                pathToSave = 'static/Temp/Edited_'+str(uuid.uuid4())+'_'+ selectedFile.name
+                pathToSaveRANSAC = 'static/Temp/Edited_RANSAC_' + str(uuid.uuid4()) + '_' + selectedFile.name
                 methods.saveImageToFile(pathToSave,forgedImage)
                 methods.saveImageToFile(pathToSaveRANSAC,forgedRansacImage)
                 return render(request, 'Cmfd.html', {
-                    'uploaded_file_url': myfile, 'edited_file_url': pathToSave,'edited_file_url2': pathToSaveRANSAC,'Post':cmfdPost
+                    'uploaded_file_url': myfile, 'edited_file_url': pathToSave,'edited_file_url2': pathToSaveRANSAC,'Post':cmfdPost,'CmfdMethods':cmfdMethods
                 })
         except BaseException as e:
             print(str(e))

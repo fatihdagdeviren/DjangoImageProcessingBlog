@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-
 </head>
 
 <body>
@@ -43,11 +42,12 @@
         </table>
 
     </div>
+
     <div class="page-section" id="ImageProcessing">
 
         <div class="row">
             <div class="col-md-12">
-                {%  if Post %}
+                {% if Post %}
                     <h4 class="widget-title">{{ Post.title }}</h4>
                     <p>{{ Post.content | safe }}</p>
                 {% endif %}
@@ -55,40 +55,14 @@
         </div>
         <div class="row">
             <div>
-                <form method="post" action="/simple_upload" enctype="multipart/form-data">
+                <form action="/Cmfd" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input type="file" name="myfile">
-                    <input type="hidden" name="redirect" value="Cmfd">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </form>
-                <form action="/Cmfd" method="post">
-                    {% csrf_token %}
+                    <label for="input-b1">Select File</label>
+                    <input id="input-b1" name="input-b1" type="file" class="file">
                     <table class="table table-inverse" style="width: 500px;">
                         <tbody>
                         <tr>
                             <td colspan="2">
-                                {% if uploaded_file_url %}
-                                    <input id="your_name" type="text" class="btn btn-primary" name="myfile"
-                                           value="{{ uploaded_file_url }}">                                    {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <!--<td class="col-md-4 col-sm-1">
-                        Extension :
-                    </td>
-                    <td>
-                        <fieldset class="col-md-4 col-sm-3">
-                            <select class="form-control" id="extension" name="extension">
-                                <option>.pdf</option>
-                                <option>.txt</option>
-                            </select>
-                        </fieldset>
-                    </td>-->
-                        </tr>
-
-                        <tr>
-                            <td colspan="2">
-                                <table></table>
                                 {% if edited_file_url %}
                                     <table>
                                         <tr>
@@ -107,7 +81,7 @@
                                 {% endif %}
                             </td>
                             <td colspan="2">
-                               {% if edited_file_url2 %}
+                                {% if edited_file_url2 %}
                                     <table>
                                         <tr>
                                             <td>
@@ -134,18 +108,18 @@
                                 </fieldset>
                             </td>
                             <td style="text-align:center;vertical-align:bottom">
+
                                 <li class="dropdown" id="accountmenu">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <input type="button" id="cmfdDropdown"
-                                                           name="cmfdDropdown" value="Methods"> <b
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <input id="cmfdDropdown"
+                                                                                                       name="cmfdDropdown" value="Methods"> <b
                                             class="caret"></b></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#" id="1" onclick="setDropDown(this)">SIFT</a></li>
-                                        <li><a href="#" id="2" onclick="setDropDown(this)">SIFT Corner Detection + DAISY Feature Matcher</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" id="3" onclick="setDropDown(this)">SIFT Corner Detection + SURF </a></li>
-                                        <li><a href="#" id="4" onclick="setDropDown(this)">SIFT Corner Detection + FREAK</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" id="5" onclick="setDropDown(this)">SIFT Corner Detection + CnsLTP</a></li>
+                                        {% if CmfdMethods %}
+                                            {% for method in CmfdMethods %}
+                                                <li><a href="#" id="{{ method.codeID }}" onclick="setDropDown(this)">{{ method.title }}</a></li>
+                                            {% endfor %}
+
+                                        {% endif %}
                                     </ul>
                                 </li>
                                 <input type="hidden" id="hdnCmfd" name="hdnCmfd">
