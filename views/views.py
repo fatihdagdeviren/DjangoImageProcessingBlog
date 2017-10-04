@@ -43,19 +43,18 @@ def DigitRec(request):
         return render(request, 'DigitRec.html',{'post':post_DigitRec})
     if request.method=="POST":
         try:
-            myfile = request.POST.get('myfile') # this is my file
+            selectedFile = request.FILES['input-b1']
+            myfile = saveImageToUrl('DigitRec', selectedFile)
             #extension  = request.POST.get('extension')
             if myfile is not None:
                 im,text = methods.hogIsle('Resources/digits_cls.pkl',myfile)
-                #pathArray = myfile.split('/')
-                ipAdress = get_client_ip(request)
-                myfile = ipAdress + '_' + str(uuid.uuid4()) + '_' + myfile
-                pathToSave = 'static/Temp/Edited_'+ myfile
-                cv2.imwrite(pathToSave,im)
+                pathToSave = 'static/Temp/Edited_'+  str(uuid.uuid4()) + '_' + selectedFile.name
+                methods.saveImageToFile(pathToSave, im)
                 return render(request,'DigitRec.html',{
                 'uploaded_file_url': myfile , 'edited_file_url': pathToSave, 'converted_text':text,'post':post_DigitRec
                  })
-        except:
+        except BaseException as e:
+            print(str(e))
             pass
     return render(request, 'DigitRec.html')
 
@@ -111,8 +110,8 @@ def cmfd(request):
                     forgedImage, forgedRansacImage = freak.sift_freak_knn(myTempFile, 0.7, 12)
                 elif method == '1005' :
                     forgedImage, forgedRansacImage = ltp.sift_ltp(myTempFile, 15, 0.7, 8,ThresholdForGLCM=None)
-                pathToSave = 'static/Temp/Edited_'+str(uuid.uuid4())+'_'+ selectedFile.name
-                pathToSaveRANSAC = 'static/Temp/Edited_RANSAC_' + str(uuid.uuid4()) + '_' + selectedFile.name
+                pathToSave = 'static/Temp/CMFD_Edited_'+str(uuid.uuid4())+'_'+ selectedFile.name
+                pathToSaveRANSAC = 'static/Temp/CMFD_Edited_RANSAC_' + str(uuid.uuid4()) + '_' + selectedFile.name
                 methods.saveImageToFile(pathToSave,forgedImage)
                 methods.saveImageToFile(pathToSaveRANSAC,forgedRansacImage)
                 return render(request, 'Cmfd.html', {
@@ -151,8 +150,6 @@ def ImageRetrieval(request):
                     pathToSave = 'static/Temp/Edited_'+ str(countForPath) +'_'+ ipAdress + '_' + str(uuid.uuid4()) + '_' + myfile
                     cv2.imwrite(pathToSave,sonuc[1])
                     imagePaths.append(pathToSave)
-
-
                 return render(request, 'ImageRetrieval.html', {
                     'uploaded_file_url': myfile, 'retrievalImages': imagePaths
                 })

@@ -14,7 +14,7 @@ mycx = '000804340759888014000%3Awzsy93prchc'
 
 def hogIsle(classifierPath, myfile):
     clf = joblib.load("Resources/digits_cls.pkl")
-    im = cv2.imread('static/Temp/' + myfile)
+    im = cv2.imread(myfile)
     im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     im_gray = cv2.GaussianBlur(im_gray, (5, 5), 0)
     ret, im_th = cv2.threshold(im_gray, 90, 255, cv2.THRESH_BINARY_INV)
