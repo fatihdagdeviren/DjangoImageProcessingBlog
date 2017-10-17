@@ -7,11 +7,13 @@ from polls.models import *
 from django.contrib.auth.decorators import login_required
 import datetime
 
+
 import views.Copy_Move_Forgery_Folder.Sift_Sift_KNN as sift
 import views.Copy_Move_Forgery_Folder.Sift_Surf_KNN as surf
 import views.Copy_Move_Forgery_Folder.Sift_Daisy_KNN as daisy
 import views.Copy_Move_Forgery_Folder.Sift_Freak_KNN as freak
 import views.Copy_Move_Forgery_Folder.SIFT_LTP_ as ltp
+import views.Panorama_Maker.Panorama_Maker as panoramaMaker
 statifFilePath = 'static/Temp/'
 
 
@@ -28,14 +30,11 @@ def home(request):
     post_index = Post.objects.filter(controllerName='Index').first()
     return render(request, 'index.html',{'post':post_index,'user':request.user})
 
-
 def ImageProcessing(request):
     return render(request, 'ImageProcessing.html')
 
-
 def Contact(request):
     return render(request, 'Contact.html')
-
 
 def DigitRec(request):
     post_DigitRec = Post.objects.filter(controllerName="DigitRec").first()
@@ -57,7 +56,6 @@ def DigitRec(request):
             print(str(e))
             pass
     return render(request, 'DigitRec.html')
-
 
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
@@ -84,7 +82,6 @@ def saveImageToUrl(controllerName,myfile):
         return filename
     except BaseException as e :
         return None
-
 
 def cmfd(request):
     cmfdPost = Post.objects.filter(controllerName = 'Cmfd').first()
@@ -122,7 +119,6 @@ def cmfd(request):
             pass
     return render(request, 'Cmfd.html')
 
-
 def ImageRetrieval(request):
     if request.method=="GET":
         return render(request, 'ImageRetrieval.html')
@@ -158,6 +154,28 @@ def ImageRetrieval(request):
             pass
         return render(request, 'ImageRetrieval.html')
 
+def PanoramaCreator(request):
+    panorama_Inputs = Post.objects.filter(controllerName="PanoramaCreator").first()
+    if request.method == "GET":
+        return render(request,'PanoramaCreator.html',{'post':panorama_Inputs})
+    elif request.method == "POST":
+        selectedFiles = request.FILES.getlist('input-b1')
+        allowedFiles = list(filter(lambda x: x.content_type in ['image/jpeg','image/png','image/jpeg']  ,selectedFiles))
+        if allowedFiles.count == 0:
+            return render(request, 'PanoramaCreator.html', {'post': panorama_Inputs})
+        else:
+            stitcher = panoramaMaker.Stitcher()
+            images = []
+            for file in allowedFiles:
+                myfile = saveImageToUrl('PanoramicImage', file)
+                images.append(cv2.imread(myfile))
+            result,vis = stitcher.stitch([images[0],images[1]],showMatches=False)
+            pathToSave = 'static/Temp/PanoramaCreator_Edited_' + str(uuid.uuid4()) + '_' + allowedFiles[0].name
+            methods.saveImageToFile(pathToSave, result)
+    return render(request, 'PanoramaCreator.html', {'post': panorama_Inputs,'edited_file_url': pathToSave})
+
+#region LoginRegion
+
 @login_required
 def PostEntry(request):
     postList = list(Post.objects.all())
@@ -188,7 +206,7 @@ def GetPost(request):
         # JsonResponse(dict(genres=list(Genre.objects.values('name', 'color'))))
         return JsonResponse({'content':selectedPost.content,'title':selectedPost.title,'controllerName':selectedPost.controllerName},safe=False)
 
-
+#endregion
 
 
 

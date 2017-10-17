@@ -18,24 +18,30 @@
             document.getElementById("ImageProcessing").style.display = "none";
 
         }//preloader
-        function setDropDown(control) {
-            $("#cmfdDropdown").val(control.text);
-            $("#hdnCmfd").val(control.id);
-        }
         function inputKontrol() {
             var file = document.getElementById('input-b1');
-            var ext = file.value.match(/\.([^\.]+)$/)[1];
-            switch (ext) {
-                case 'jpg':
-                case 'jpeg':
-                case 'png':
-                    break;
-                default:
-                    alert('This extension is not allowed (Only .jpg,.jpeg and .png files are allowed)');
-                    file.value = "";
-                    this.value = '';
+            var files;
+            if (file.files.length > 2) {
+                alert("Only 2 image is allowed for stitching");
+                return;
             }
-        };
+            for (var i = 0; i < file.files.length; i++) {
+                var file = file.files[i];
+                var ext = file.name.match(/\.([^\.]+)$/)[1];
+                switch (ext) {
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                        break;
+                    default:
+                        alert('This extension is not allowed (Only .jpg,.jpeg and .png files are allowed)');
+                        file.value = "";
+                        this.value = '';
+                }
+            }
+
+        }
+
         // ]]>
     </script>
     <div class="page-section" id="loading" style="z-index: 1000;display: none;
@@ -69,10 +75,10 @@
         </div>
         <div class="row">
             <div>
-                <form action="/Cmfd" method="post" enctype="multipart/form-data">
+                <form action="/PanoramaCreator" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <label for="input-b1">Select File</label>
-                    <input id="input-b1" name="input-b1" type="file" class="file" onchange="inputKontrol()">
+                    <input id="input-b1" multiple="multiple" name="input-b1" type="file" class="file" onchange="inputKontrol()">
                     <table class="table table-inverse" style="width: 500px;">
                         <tbody>
                         <tr>
@@ -81,35 +87,11 @@
                                     <table>
                                         <tr>
                                             <td>
-                                                Without RANSAC
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
                                                 <img src="../{{ edited_file_url }}" class="img-rounded">
                                             </td>
 
                                         </tr>
                                     </table>
-
-                                {% endif %}
-                            </td>
-                            <td colspan="2">
-                                {% if edited_file_url2 %}
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                With RANSAC
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="../{{ edited_file_url2 }}" class="img-rounded">
-                                            </td>
-
-                                        </tr>
-                                    </table>
-
                                 {% endif %}
                             </td>
                         </tr>
@@ -120,23 +102,7 @@
                                     <input type="submit" class="btn btn-primary" value="Process" onclick="loader()">
                                 </fieldset>
                             </td>
-                            <td style="text-align:center;vertical-align:bottom">
 
-                                <li class="dropdown" id="accountmenu">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> <input id="cmfdDropdown"
-                                                                                                       name="cmfdDropdown" value="Methods"> <b
-                                            class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        {% if CmfdMethods %}
-                                            {% for method in CmfdMethods %}
-                                                <li><a href="#" id="{{ method.codeID }}" onclick="setDropDown(this)">{{ method.title }}</a></li>
-                                            {% endfor %}
-
-                                        {% endif %}
-                                    </ul>
-                                </li>
-                                <input type="hidden" id="hdnCmfd" name="hdnCmfd">
-                            </td>
                         </tr>
                         </tbody>
                     </table>

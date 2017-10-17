@@ -12,6 +12,8 @@ import hashlib
 myapiKey = 'AIzaSyDyn8Fg0lDikUh1fCrruKDioiDi_OpvkDQ'
 mycx = '000804340759888014000%3Awzsy93prchc'
 
+
+
 def hogIsle(classifierPath, myfile):
     clf = joblib.load("Resources/digits_cls.pkl")
     im = cv2.imread(myfile)

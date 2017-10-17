@@ -16,6 +16,20 @@
         document.getElementById("ImageProcessing").style.display = "none";
 
     }//preloader
+    function inputKontrol() {
+        var file = document.getElementById('input-b1');
+        var ext = file.value.match(/\.([^\.]+)$/)[1];
+        switch (ext) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+                break;
+            default:
+                alert('This extension is not allowed (Only .jpg,.jpeg and .png files are allowed)');
+                file.value = "";
+                this.value = '';
+        }
+    };
 
     // ]]></script>
 
@@ -39,7 +53,7 @@
                     <tr>
                         <td colspan="2">
                             <label for="input-b1">Select File</label>
-                            <input id="input-b1" name="input-b1" type="file" class="file">
+                            <input id="input-b1" name="input-b1" type="file" class="file" onchange="inputKontrol()">
                         </td>
                     </tr>
                     <tr>
