@@ -14,6 +14,7 @@ import views.Copy_Move_Forgery_Folder.Sift_Daisy_KNN as daisy
 import views.Copy_Move_Forgery_Folder.Sift_Freak_KNN as freak
 import views.Copy_Move_Forgery_Folder.SIFT_LTP_ as ltp
 import views.Panorama_Maker.Panorama_Maker as panoramaMaker
+import views.Facial_Emotion_Detection.Facial_Emotion_Detector as fed
 statifFilePath = 'static/Temp/'
 
 
@@ -157,12 +158,12 @@ def ImageRetrieval(request):
 def PanoramaCreator(request):
     panorama_Inputs = Post.objects.filter(controllerName="PanoramaCreator").first()
     if request.method == "GET":
-        return render(request,'PanoramaCreator.html',{'post':panorama_Inputs})
+        return render(request,'PanoramaCreator.html',{'Post':panorama_Inputs})
     elif request.method == "POST":
         selectedFiles = request.FILES.getlist('input-b1')
         allowedFiles = list(filter(lambda x: x.content_type in ['image/jpeg','image/png','image/jpeg']  ,selectedFiles))
         if allowedFiles.count == 0:
-            return render(request, 'PanoramaCreator.html', {'post': panorama_Inputs})
+            return render(request, 'PanoramaCreator.html', {'Post': panorama_Inputs})
         else:
             stitcher = panoramaMaker.Stitcher()
             images = []
@@ -172,7 +173,30 @@ def PanoramaCreator(request):
             result,vis = stitcher.stitch([images[0],images[1]],showMatches=False)
             pathToSave = 'static/Temp/PanoramaCreator_Edited_' + str(uuid.uuid4()) + '_' + allowedFiles[0].name
             methods.saveImageToFile(pathToSave, result)
-    return render(request, 'PanoramaCreator.html', {'post': panorama_Inputs,'edited_file_url': pathToSave})
+    return render(request, 'PanoramaCreator.html', {'Post': panorama_Inputs,'edited_file_url': pathToSave})
+
+def EmotionRecognition(request):
+    post_Emo = Post.objects.filter(controllerName="EmotionRecognition").first()
+    if request.method=="GET":
+        return render(request, 'EmotionRecognition.html',{'post':post_Emo})
+    if request.method=="POST":
+        try:
+            selectedFile = request.FILES['input-b1']
+            myfile = saveImageToUrl('EmotionRecognition', selectedFile)
+            #extension  = request.POST.get('extension')
+            if myfile is not None:
+                emotionPredictor = fed.Facial_Emotion_Detector()
+                emotion,resultImage = emotionPredictor.predictImage(myfile)
+                pathToSave = 'static/Temp/CMFD_Edited_' + str(uuid.uuid4()) + '_' + selectedFile.name
+                methods.saveImageToFile(pathToSave, resultImage)
+                return render(request,'EmotionRecognition.html',{
+                'uploaded_file_url': myfile,'edited_file_url':pathToSave , 'converted_text':emotion,'post':post_Emo
+                 })
+        except BaseException as e:
+            print(str(e))
+            pass
+    return render(request, 'EmotionRecognition.html')
+
 
 #region LoginRegion
 

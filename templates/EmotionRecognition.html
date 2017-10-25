@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% extends 'index.html' %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+{% block content %}
+
+    <script type="text/javascript">// <![CDATA[
+    function preloader() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("ImageProcessing").style.display = "none";
+
+    }//preloader
+    function inputKontrol() {
+        var file = document.getElementById('input-b1');
+        var ext = file.value.match(/\.([^\.]+)$/)[1];
+        switch (ext) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+                break;
+            default:
+                alert('This extension is not allowed (Only .jpg,.jpeg and .png files are allowed)');
+                file.value = "";
+                this.value = '';
+        }
+    };
+
+    // ]]></script>
+
+    <div class="page-section" id="loading" style="z-index: 1000;background-image:url('/static/loadingimage.gif');display: none;
+    background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;"></div>
+    <div class="page-section" id="ImageProcessing">
+    <div class="row">
+        {% if post %}
+            <div class="col-md-12">
+                <h4 class="widget-title">{{ post.title }} ( last update : {{ post.last_update }}) </h4>
+                <p> {{ post.content }} </p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div>
+            <form action="/EmotionRecognition" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table table-inverse" style="width: 500px;">
+                    <tbody>
+                    <tr>
+                        <td colspan="2">
+                            <label for="input-b1">Select File</label>
+                            <input id="input-b1" name="input-b1" type="file" class="file" onchange="inputKontrol()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            {% if uploaded_file_url %}
+                                <input id="your_name" type="text" class="btn btn-primary" name="myfile" value="File Uploaded">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            {% if edited_file_url %}
+                                <img src="../{{ edited_file_url }}"  class="img-rounded">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            {% if converted_text %}
+                                <input type="text" class="form-control" id="txtDigitRec" value="{{ converted_text }}">
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td colspan="2" style="align-self: center">
+                            <br/>
+                            <fieldset class="col-md-12 col-sm-12">
+                                <input type="submit" class="btn btn-primary" value="Process" onclick="preloader()">
+
+                            </fieldset>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-
+import pickle
 import cv2
 from sklearn.externals import joblib
 from skimage.feature import hog
@@ -147,3 +147,24 @@ def saveImageToFile(filePath,image):
         cv2.imwrite(filePath,image)
     except BaseException as e:
         print(str(e))
+
+def pickleOlustur(fileName,object,method=None):
+    try:
+        if method is None:
+            with open(fileName, 'w') as fp:
+                json.dump(object, fp)
+        elif method == 1:
+                joblib.dump(object, fileName)
+        return '0'
+    except BaseException as e:
+        print(str(e))
+        return '-1'
+
+def pickleYukle(fileName,method=None):
+    #data =joblib.load(fileName)
+    if method is None:
+        with open(fileName, 'r') as fp:
+            data = json.loads(fp.read())
+    elif method == 1:
+        data =joblib.load(fileName)
+    return data

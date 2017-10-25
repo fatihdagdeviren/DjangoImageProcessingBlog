@@ -41,43 +41,9 @@
 <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
-<div class="responsive-header visible-xs visible-sm">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="top-section">
-                    <div class="profile-image">
-                        <img src="../static/img/profile.jpg" alt="Volton">
-                    </div>
-                    <div class="profile-content">
-                        <h3 class="profile-title">F.D</h3>
-                        <p class="profile-description">Image Processing Blog</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a href="#" class="toggle-menu"><i class="fa fa-bars"></i></a>
-        <div class="main-navigation responsive-menu">
-            <ul class="navigation">
-                <li><a href="#top"><i class="fa fa-globe"></i>Welcome</a></li>
-                <li><a href="/"><i class="fa fa-pencil"></i>About Me</a></li>
-                <li><a href="/ImageProcessing"><i class="fa fa-camera-retro"></i>Image Processing</a></li>
-                <li><a href="/Contact"><i class="fa fa-paperclip"></i>Contact</a></li>
-                {% if user.id is not None %}
-                    <li><a href="/logout"><i class="fa fa-paperclip"></i>Logout</a></li>
-                {% else %}
-                    <li><a href="/login"><i class="fa fa-paperclip"></i>Login</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</div>
-
-
-<!-- SIDEBAR -->
+{% block sidebar %}
+    <!-- SIDEBAR -->
 <div class="sidebar-menu hidden-xs hidden-sm">
-    {% block sidebar %}
         <div class="top-section">
             <div class="profile-image">
                 <img src="../static/img/profile.jpg" alt="Volton">
@@ -91,9 +57,10 @@
             <li><a href="/ImageProcessing"><i class="fa fa-camera-retro"></i>Image Processing</a></li>
             <li><a href="/Contact"><i class="fa fa-paperclip"></i>Contact</a></li>
             {% if user.id is not None %}
-                <li><a href="/logout"><i class="fa fa-paperclip"></i>Logout</a></li>
+                <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
+                <li><a href="/PostEntry"><i class="fa fa-newspaper-o"></i>PostEntry</a></li>
             {% else %}
-                <li><a href="/login"><i class="fa fa-paperclip"></i>Login</a></li>
+                <li><a href="/login"><i class="fa fa-sign-in"></i>Login</a></li>
             {% endif %}
         </div> <!-- .main-navigation -->
         <div class="social-icons">
@@ -106,9 +73,9 @@
                 <li><a href="#"><i class="fa fa-rss"></i></a></li>
             </ul>
         </div> <!-- .social-icons -->
-    {% endblock %}
-</div> <!-- .sidebar-menu -->
 
+</div> <!-- .sidebar-menu -->
+{% endblock %}
 
 <!-- MAIN CONTENT -->
 <div class="main-content">

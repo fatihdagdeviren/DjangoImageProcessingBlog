@@ -40,6 +40,9 @@
         function sendAjaxRequest(element) {
             var clickedButton = element;
             if (clickedButton.id == -1) {
+                $("#postContent").val('');
+                $("#txtPostTitle").val('');
+                $("#txtControllerName").val('');
                 return;
             }
             $.ajax(
