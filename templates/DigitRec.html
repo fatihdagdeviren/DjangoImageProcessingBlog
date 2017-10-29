@@ -39,8 +39,9 @@
     <div class="row">
         {% if post %}
             <div class="col-md-12">
-                <h4 class="widget-title">{{ post.title }} ( last update : {{ post.last_update }}) </h4>
-                <p> {{ post.content }} </p>
+                <h4 class="widget-title">{{ post.title }} </h4>
+                <p class="widget-title">Updated at : {{ post.lastUpdate }}</p>
+                <p> {{ post.content | safe}} </p>
             </div>
         {% endif %}
     </div>

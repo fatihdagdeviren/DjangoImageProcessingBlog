@@ -16,7 +16,7 @@ import views.Copy_Move_Forgery_Folder.SIFT_LTP_ as ltp
 import views.Panorama_Maker.Panorama_Maker as panoramaMaker
 import views.Facial_Emotion_Detection.Facial_Emotion_Detector as fed
 statifFilePath = 'static/Temp/'
-
+from django.conf.urls.static import static
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -34,7 +34,27 @@ def home(request):
 def ImageProcessing(request):
     return render(request, 'ImageProcessing.html')
 
+
+
+
 def Contact(request):
+    from django.http import HttpResponse
+    if request.method == 'POST':
+        ip = get_client_ip(request)
+        if ip is not None:
+            message = Message.objects.filter(IpAddress=ip).first()
+            today = datetime.date.today()
+            if message is not None and message.Date == today  :
+                return render(request, 'Contact.html',{'message':'You can send 1 message per day'})
+            message = Message()
+            message.Name = request.POST.get('your-name')
+            message.Mail = request.POST.get('email')
+            message.Subject = request.POST.get('your-subject')
+            message.Message = request.POST.get('message')
+            message.IpAddress = ip
+            message.Date = datetime.datetime.now()
+            message.save()
+            render(request, 'Contact.html', {'message': 'Your message was sent successfully'})
     return render(request, 'Contact.html')
 
 def DigitRec(request):

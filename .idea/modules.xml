@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/Desktop/ApiIstekGonder/.idea/ApiIstekGonder.iml" filepath="$USER_HOME$/Desktop/ApiIstekGonder/.idea/ApiIstekGonder.iml" />
-      <module fileurl="file://$USER_HOME$/Desktop/Api_Tutorial/.idea/Api_Tutorial.iml" filepath="$USER_HOME$/Desktop/Api_Tutorial/.idea/Api_Tutorial.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/DjangoImageProcessingBlog.iml" filepath="$PROJECT_DIR$/.idea/DjangoImageProcessingBlog.iml" />
     </modules>
   </component>
