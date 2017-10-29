@@ -57,6 +57,7 @@ def Contact(request):
             render(request, 'Contact.html', {'message': 'Your message was sent successfully'})
     return render(request, 'Contact.html')
 
+
 def DigitRec(request):
     post_DigitRec = Post.objects.filter(controllerName="DigitRec").first()
     if request.method=="GET":
