@@ -38,5 +38,6 @@ urlpatterns = [
     url(r'^GetPost', views.GetPost),
     url(r'^PanoramaCreator', views.PanoramaCreator),
     url(r'^PostEntry', views.PostEntry),
-    url(r'^EmotionRecognition', views.EmotionRecognition)
+    url(r'^EmotionRecognition', views.EmotionRecognition),
+    url(r'^AboutMe', views.AboutMe)
 ]

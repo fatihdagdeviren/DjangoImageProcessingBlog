@@ -16,7 +16,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-
     <link rel="stylesheet" href="../static/css/normalize.css">
     <link rel="stylesheet" href="../static/css/font-awesome.css">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
@@ -43,17 +42,23 @@
         <![endif]-->
 {% block sidebar %}
     <!-- SIDEBAR -->
-<div class="sidebar-menu hidden-xs hidden-sm">
+    <div class="sidebar-menu hidden-xs hidden-sm">
         <div class="top-section">
             <div class="profile-image">
                 <img src="../static/img/profile.jpg" alt="Volton">
             </div>
-            <h3 class="profile-title">F.D</h3>
-            <p class="profile-description">Image Processing Blog</p>
+            <div class="social-icons">
+                <ul>
+                    <li><a href="https://www.facebook.com/profile.php?id=100011739141971"><i class="fa fa-facebook"></i>atih</a></li>
+                    <h3 class="profile-title">Dagdeviren's</h3>
+                    <p class="profile-description">Diary</p>
+                </ul>
+            </div> <!-- .social-icons -->
+
         </div> <!-- top-section -->
         <div class="main-navigation">
-            <li><a href="#top"><i class="fa fa-globe"></i>Welcome</a></li>
-            <li><a href="/"><i class="fa fa-pencil"></i>About Me</a></li>
+            <li><a href="/"><i class="fa fa-globe"></i>Welcome</a></li>
+            <li><a href="/AboutMe"><i class="fa fa-pencil"></i>About Me</a></li>
             <li><a href="/ImageProcessing"><i class="fa fa-camera-retro"></i>Image Processing</a></li>
             <li><a href="/Contact"><i class="fa fa-paperclip"></i>Contact</a></li>
             {% if user.id is not None %}
@@ -63,18 +68,9 @@
                 <li><a href="/login"><i class="fa fa-sign-in"></i>Login</a></li>
             {% endif %}
         </div> <!-- .main-navigation -->
-        <div class="social-icons">
-            <ul>
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
-                <li><a href="#"><i class="fa fa-rss"></i></a></li>
-            </ul>
-        </div> <!-- .social-icons -->
 
-</div> <!-- .sidebar-menu -->
+
+    </div> <!-- .sidebar-menu -->
 {% endblock %}
 
 <!-- MAIN CONTENT -->
