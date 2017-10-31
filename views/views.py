@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 import cv2
+from pip._vendor.cachecontrol import controller
+
 import views.Methods as methods
 import uuid
 from polls.models import *
@@ -32,7 +34,8 @@ def home(request):
     return render(request, 'index.html',{'post':post_index,'user':request.user})
 
 def ImageProcessing(request):
-    return render(request, 'ImageProcessing.html')
+    post = Post.objects.filter(controllerName='ImageProcessing').first()
+    return render(request, 'ImageProcessing.html',{'post':post})
 
 def AboutMe(request):
     aboutMePost = Post.objects.filter(controllerName='AboutMe').first()
@@ -79,22 +82,6 @@ def DigitRec(request):
             pass
     return render(request, 'DigitRec.html')
 
-def simple_upload(request):
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        redirectPage = request.POST.get('redirect')
-        fs = FileSystemStorage()
-        ipAdress = get_client_ip(request)
-        myfile.name = redirectPage+'_'+ myfile.name
-        uploadUrl = 'static/Temp/'+ myfile.name
-        filename = fs.save(uploadUrl, myfile)
-        uploaded_file_url = fs.url(myfile.name)
-        try:
-            return render(request, '{}.html'.format(redirectPage), {
-                'uploaded_file_url': uploaded_file_url
-            })
-        except BaseException as e:
-            print(str(e))
 
 def saveImageToUrl(controllerName,myfile):
     try:

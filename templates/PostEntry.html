@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
 {% block content %}
 
     <script type="text/javascript">
@@ -54,7 +55,7 @@
                         $("#postContent").val(result.content);
                         $("#txtPostTitle").val(result.title);
                         $("#txtControllerName").val(result.controllerName);
-                        alert(result.title);
+                        //alert(result.title);
                     },
                     error: function (result) {
                         alert('error');
@@ -103,7 +104,7 @@
                         <div class="dropdown">
                             <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Posts
                                 <span class="caret"></span></button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                            <ul class="dropdown-menu" style="background-color:#8a6d3b" role="menu" aria-labelledby="menu1">
                                 {% for post in postList %}
                                     <li role="presentation"><a role="menuitem" id="{{ post.id }}" name="menu1" onclick="sendAjaxRequest(this)"
                                                                tabindex="-1">{{ post.title }}</a></li>
@@ -161,6 +162,7 @@
 
 
 {% endblock %}
+
 </body>
 
 </html>

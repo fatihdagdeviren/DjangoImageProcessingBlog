@@ -29,7 +29,6 @@ urlpatterns = [
     url(r'^ImageProcessing', views.ImageProcessing),
     url(r'^Contact', views.Contact),
     url(r'^DigitRec', views.DigitRec),
-    url(r'^simple_upload', views.simple_upload),
     url(r'^Cmfd', views.cmfd),
     url(r'^ImageRetrieval', views.ImageRetrieval),
     url(r'^login/$', auth_views.login, name='login'),

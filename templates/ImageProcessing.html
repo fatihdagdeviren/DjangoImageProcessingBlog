@@ -13,8 +13,14 @@
     <div class="page-section" id="ImageProcessing">
     <div class="row">
         <div class="col-md-12">
-            <h4 class="widget-title">Image Processing Methods</h4>
-            <p> Image Processing ile ilgili açıklamaları alıcam buraya </p>
+            {% if post %}
+                <div class="col-md-s12">
+                    <h4 class="widget-title">{{ post.title | safe }} </h4>
+                    <p class="widget-title">Updated at : {{ post.lastUpdate }}</p>
+                    <p> {{ post.content | safe }} </p>
+                </div>
+            {% endif %}
+
         </div>
     </div>
     <div class="row">
@@ -34,12 +40,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">Image Steganography </th>
+                    <th scope="row">Image Steganography</th>
                     <td>
-                        <a href="/Cmfd">Copy Move Forgery Detection</a>,
+                        <a href="/Cmfd">Copy Move Forgery Detection</a>
                     </td>
                 </tr>
-                 <tr>
+                <tr>
                     <th scope="row">Panorama</th>
                     <td>
                         <a href="/PanoramaCreator">Image Stitching</a>
