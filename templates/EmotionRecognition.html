@@ -36,12 +36,12 @@
     <div class="page-section" id="loading" style="z-index: 1000;background-image:url('/static/loadingimage.gif');display: none;
     background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;"></div>
     <div class="page-section" id="ImageProcessing">
-    <div class="row">
+    <div class="container">
         {% if post %}
-            <div class="col-md-12">
+            <div class="col-md-12" style="vertical-align: top">
                 <h4 class="widget-title">{{ post.title }}</h4>
                  <p class="widget-title">Updated at : {{ post.lastUpdate }}</p>
-                <p> {{ post.content |safe }} </p>
+                {{ post.content |safe }}
             </div>
         {% endif %}
     </div>

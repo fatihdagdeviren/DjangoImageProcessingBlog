@@ -15,7 +15,7 @@
         // <![CDATA[
         function loader() {
             document.getElementById("loading").style.display = "block";
-            document.getElementById("ImageProcessing").style.display = "none";
+            document.getElementById("PanoramaCreator").style.display = "none";
 
         }//preloader
         function inputKontrol() {
@@ -44,7 +44,7 @@
 
         // ]]>
     </script>
-    <div class="page-section" id="loading" style="z-index: 1000;display: none;
+   <div class="page-section" id="loading" style="z-index: 1000;display: none;
     background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;">
         <table>
             <tr>
@@ -60,7 +60,6 @@
                 </td>
             </tr>
         </table>
-
     </div>
 
     <div class="page-section" id="PanoramaCreator">
@@ -69,6 +68,7 @@
             <div class="col-md-12">
                 {% if Post %}
                     <h4 class="widget-title">{{ Post.title }}</h4>
+                      <p class="widget-title">Updated at : {{ Post.lastUpdate }}</p>
                     <p>{{ Post.content | safe }}</p>
                 {% endif %}
             </div>

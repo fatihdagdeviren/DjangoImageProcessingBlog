@@ -49,21 +49,20 @@
             </div>
             <div class="social-icons">
                 <ul>
-                    <li><a href="https://www.facebook.com/profile.php?id=100011739141971"><i class="fa fa-facebook"></i>atih</a></li>
-                    <h3 class="profile-title">Dagdeviren's</h3>
+                    <li><a href="https://www.facebook.com/profile.php?id=100011739141971"><i class="fa fa-facebook"></i>atih's</a></li>
                     <p class="profile-description">Diary</p>
                 </ul>
             </div> <!-- .social-icons -->
 
         </div> <!-- top-section -->
         <div class="main-navigation">
-            <li><a href="/"><i class="fa fa-globe"></i>Welcome</a></li>
             <li><a href="/AboutMe"><i class="fa fa-pencil"></i>About Me</a></li>
             <li><a href="/ImageProcessing"><i class="fa fa-camera-retro"></i>Image Processing Tasks</a></li>
             <li><a href="/Contact"><i class="fa fa-paper-plane-o"></i>Contact</a></li>
+            <li><a href="../static/docs/Fatih_Dagdeviren_CV.pdf"><i class="fa fa-file-pdf-o" area-hidden="True"></i>CV</a></li>
             {% if user.id is not None %}
                 <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
-                <li><a href="/PostEntry"><i class="fa fa-newspaper-o"></i>PostEntry</a></li>
+                <li><a href="/AdminPanel"><i class="fa fa-newspaper-o"></i>Admin Panel</a></li>
             {% else %}
                 <li><a href="/login"><i class="fa fa-sign-in"></i>Login</a></li>
             {% endif %}
@@ -78,7 +77,6 @@
     <div class="fluid-container">
         <div class="content-wrapper">
             {% block content %}
-                ddd
                 {% if post %}
 
                     <div class="page-section" id="ImageProcessing">

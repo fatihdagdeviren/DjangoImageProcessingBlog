@@ -30,8 +30,10 @@ def get_client_ip(request):
 
 def home(request):
     """Renders the home page."""
-    post_index = Post.objects.filter(controllerName='Index').first()
-    return render(request, 'index.html',{'post':post_index,'user':request.user})
+    # post_index = Post.objects.filter(controllerName='Index').first()
+    # return render(request, 'index.html',{'post':post_index,'user':request.user})
+    aboutMePost = Post.objects.filter(controllerName='AboutMe').first()
+    return render(request, 'AboutMe.html', {'post': aboutMePost})
 
 def ImageProcessing(request):
     post = Post.objects.filter(controllerName='ImageProcessing').first()
@@ -206,27 +208,33 @@ def EmotionRecognition(request):
     return render(request, 'EmotionRecognition.html')
 
 #region LoginRegion
+from django.contrib.auth.decorators import user_passes_test
+
 
 @login_required
 def PostEntry(request):
     postList = list(Post.objects.all())
     if request.method == "GET":
-        return render(request, 'PostEntry.html', {'postList': postList})
+        return render(request, 'admin/PostEntry.html', {'postList': postList})
     elif request.method == "POST":
-        try:
-            p = Post.objects.filter(controllerName= request.POST.get('txtControllerName')).first()
-            if p is None:
-                p = Post()
-            p.title = request.POST.get('txtPostTitle')
-            p.content = request.POST.get('postContent')
-            p.controllerName = request.POST.get('txtControllerName')
-            p.lastUpdate = datetime.datetime.now()
-            p.save()
-        except BaseException as e:
-            print(e)
-            pass
+        p = Post.objects.filter(controllerName=request.POST.get('txtControllerName')).first()
+        method = request.POST.get('Process')
+        if method == 'Save':
+            try:
+                if p is None:
+                    p = Post()
+                p.title = request.POST.get('txtPostTitle')
+                p.content = request.POST.get('postContent')
+                p.controllerName = request.POST.get('txtControllerName')
+                p.lastUpdate = datetime.datetime.now()
+                p.save()
+            except BaseException as e:
+                print(e)
+                pass
+        elif method=='Delete' and p is not None:
+            p.delete()
         postList = list(Post.objects.all())
-        return render(request, 'PostEntry.html', {'postList': postList})
+        return render(request, 'admin/PostEntry.html', {'postList': postList})
 
 @login_required
 def GetPost(request):
@@ -236,6 +244,11 @@ def GetPost(request):
         selectedPost = Post.objects.filter(id = postId).first()
         # JsonResponse(dict(genres=list(Genre.objects.values('name', 'color'))))
         return JsonResponse({'content':selectedPost.content,'title':selectedPost.title,'controllerName':selectedPost.controllerName},safe=False)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def AdminPanel(request):
+    return render(request,'admin/AdminPanel.html')
 
 #endregion
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html> {% extends 'index.html' %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+
+<body>
+
+{% block content %}
+
+    <script type="text/javascript">
+
+    </script>
+
+    <div class="page-section" id="loading" style="z-index: 1000;display: none;
+    background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;">
+
+        <table>
+            <tr>
+                <td align="center" style="background-color: black">
+                    <label for="usr" style="text-align: center;width:200px;color: white">Processing...</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="page-section" style="z-index: 1000;background-image:url('/static/loadingimage.gif');
+              background-repeat: no-repeat; height: 100%;;width: 100%;background-size: cover;position: absolute">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="page-section" id="AdminPanel">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="widget-title">Welcome {{ authenticatedUser.user_name }}</h4>
+                <p>Post Entry Page for Admin </p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                        <div>
+                            <div class="dropdown">
+                                <li><a href="/PostEntry"><i class="fa fa-pencil"></i>Post Kontrolu</a></li>
+                                <li><a href="/ImageProcessing"><i class="fa fa-camera-retro"></i>Image Processing Tasks</a></li>
+                                <li><a href="/Contact"><i class="fa fa-paper-plane-o"></i>Contact</a></li>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+</body>
+
+</html>
