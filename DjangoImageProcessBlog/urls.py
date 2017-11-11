@@ -30,7 +30,6 @@ urlpatterns = [
     url(r'^Contact', views.Contact),
     url(r'^DigitRec', views.DigitRec),
     url(r'^Cmfd', views.cmfd),
-    url(r'^ImageRetrieval', views.ImageRetrieval),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
@@ -39,5 +38,7 @@ urlpatterns = [
     url(r'^PostEntry', views.PostEntry),
     url(r'^EmotionRecognition', views.EmotionRecognition),
     url(r'^AboutMe', views.AboutMe),
+    url(r'^DiabeticRetinopathy', views.DiabeticRetinopathy),
+    url(r'^Armd', views.Armd),
     url(r'^AdminPanel', views.AdminPanel)
 ]

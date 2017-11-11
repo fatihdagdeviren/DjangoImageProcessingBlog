@@ -24,18 +24,18 @@
     <div class="page-section" id="loading" style="z-index: 1000;background-image:url('/static/loadingimage.gif');display: none;
     background-repeat: no-repeat; height: 200px;;width: 200px;background-size: cover;position: absolute;top: 50%;left: 50%;"></div>
     <div class="page-section" id="ImageProcessing">
-    <div class="container">
+    <div class="row">
         {% if post %}
-            <div class="col-md-12" style="vertical-align: top">
-                <h4 class="widget-title">{{ post.title }}</h4>
-                 <p class="widget-title">Updated at : {{ post.lastUpdate }}</p>
-                {{ post.content |safe }}
+            <div class="col-md-12">
+                <h4 class="widget-title">{{ post.title }} </h4>
+                <p class="widget-title">Updated at : {{ post.lastUpdate }}</p>
+                <p> {{ post.content | safe }} </p>
             </div>
         {% endif %}
     </div>
     <div class="row">
         <div>
-            <form action="/EmotionRecognition" method="post" enctype="multipart/form-data">
+            <form action="/DiabeticRetinopathy" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <table class="table table-inverse" style="width: 500px;">
                     <tbody>
@@ -54,26 +54,22 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            {% if edited_file_url %}
-                                <img src="../{{ edited_file_url }}"  class="img-rounded">
-                            {% endif %}
+                            <input type="text" class="form-control" id="thresholdValue" name="thresholdValue" placeholder="Enter Threshold Value">
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            {% if converted_text %}
-                                <input type="text" class="form-control" id="txtDigitRec" value="You feel {{ converted_text }}">
+                            {% if edited_file_url %}
+                                <img src="../{{ edited_file_url }}" class="img-rounded">
                             {% endif %}
                         </td>
-
                     </tr>
                     <tr>
 
-                        <td colspan="2" style="align-self: center">
+                        <td colspan="2" style=" align-self: center">
                             <br/>
                             <fieldset class="col-md-12 col-sm-12">
                                 <input type="submit" class="btn btn-primary" value="Process" onclick="preloader()">
-
                             </fieldset>
                         </td>
                     </tr>

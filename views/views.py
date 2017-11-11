@@ -17,8 +17,10 @@ import views.Copy_Move_Forgery_Folder.Sift_Freak_KNN as freak
 import views.Copy_Move_Forgery_Folder.SIFT_LTP_ as ltp
 import views.Panorama_Maker.Panorama_Maker as panoramaMaker
 import views.Facial_Emotion_Detection.Facial_Emotion_Detector as fed
+import views.Eye_Disease_Detection.Eye_Disease_Detection as edd
 statifFilePath = 'static/Temp/'
 
+allowedExtensions = ('.jpg','.png','.jpeg')
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -62,7 +64,6 @@ def Contact(request):
             return render(request, 'Contact.html', {'message': 'Your message was sent successfully'})
     return render(request, 'Contact.html')
 
-
 def DigitRec(request):
     post_DigitRec = Post.objects.filter(controllerName="DigitRec").first()
     if request.method=="GET":
@@ -70,6 +71,8 @@ def DigitRec(request):
     if request.method=="POST":
         try:
             selectedFile = request.FILES['input-b1']
+            if not selectedFile.name.endswith(allowedExtensions):
+                return render(request, 'DigitRec.html', {'post': post_DigitRec})
             myfile = saveImageToUrl('DigitRec', selectedFile)
             #extension  = request.POST.get('extension')
             if myfile is not None:
@@ -83,7 +86,6 @@ def DigitRec(request):
             print(str(e))
             pass
     return render(request, 'DigitRec.html')
-
 
 def saveImageToUrl(controllerName,myfile):
     try:
@@ -102,6 +104,8 @@ def cmfd(request):
     if request.method=="POST" and  request.FILES['input-b1']:
         try:
             selectedFile = request.FILES['input-b1']
+            if not selectedFile.name.endswith(allowedExtensions):
+                return render(request, 'Cmfd.html', {'Post': cmfdPost, 'CmfdMethods': cmfdMethods})
             myfile = saveImageToUrl('Cmfd',selectedFile)
             method = request.POST.get('hdnCmfd')
             ipAdress = get_client_ip(request)
@@ -192,12 +196,14 @@ def EmotionRecognition(request):
     if request.method=="POST":
         try:
             selectedFile = request.FILES['input-b1']
+            if not selectedFile.name.endswith(allowedExtensions):
+                return render(request, 'EmotionRecognition.html', {'post': post_Emo})
             myfile = saveImageToUrl('EmotionRecognition', selectedFile)
             #extension  = request.POST.get('extension')
             if myfile is not None:
                 emotionPredictor = fed.Facial_Emotion_Detector()
                 emotion,resultImage = emotionPredictor.predictImage(myfile)
-                pathToSave = 'static/Temp/CMFD_Edited_' + str(uuid.uuid4()) + '_' + selectedFile.name
+                pathToSave = 'static/Temp/EmotionR_Edited_' + str(uuid.uuid4()) + '_' + selectedFile.name
                 methods.saveImageToFile(pathToSave, resultImage)
                 return render(request,'EmotionRecognition.html',{
                 'uploaded_file_url': myfile,'edited_file_url':pathToSave , 'converted_text':emotion,'post':post_Emo
@@ -206,6 +212,61 @@ def EmotionRecognition(request):
             print(str(e))
             pass
     return render(request, 'EmotionRecognition.html')
+
+#region Disease_Detection
+
+def DiabeticRetinopathy(request):
+    post_diabet = Post.objects.filter(controllerName="DiabeticRetinopathy").first()
+    if request.method == "POST":
+        try :
+            selectedFile = request.FILES['input-b1']
+            if selectedFile is not None:
+                myfile = saveImageToUrl('DiabeticRetinopathy', selectedFile)
+                if myfile is not  None:
+                    dr =  edd.Diabetic_Retinopathy(myfile)
+                    thresholdValue = request.POST.get('thresholdValue')
+                    if thresholdValue is None or thresholdValue == '' or type(thresholdValue) != int:
+                        thresholdValue = 75
+                    medianFilterDimension = 5
+                    resultImage = dr.findExudates(thresholdValue=thresholdValue,medianFilterDimension=medianFilterDimension)
+                    resultImage = methods.resizeImage(resultImage,500,500)
+                    pathToSave = 'static/Temp/DiabeticRetinopathy_Edited_' + str(uuid.uuid4()) + '_' + selectedFile.name
+                    methods.saveImageToFile(pathToSave, resultImage)
+                    return render(request, 'DiabeticRetinopathy.html', {
+                        'uploaded_file_url': myfile, 'edited_file_url': pathToSave, 'post': post_diabet
+                    })
+        except BaseException as e:
+            print(str(e))
+            pass
+    return render(request, 'DiabeticRetinopathy.html', {'post': post_diabet})
+
+def Armd(request):
+    post_armd = Post.objects.filter(controllerName="Armd").first()
+    if request.method == "POST":
+        try :
+            selectedFile = request.FILES['input-b1']
+            if selectedFile is not None:
+                myfile = saveImageToUrl('Armd', selectedFile)
+                if myfile is not  None:
+                    dr =  edd.Age_Related_Macular_Degeneration(myfile)
+                    thresholdValue = request.POST.get('thresholdValue')
+                    thresholdValue,parseResult = methods.intTryParse(thresholdValue)
+                    if not  parseResult:
+                        thresholdValue = 75
+                    medianFilterDimension = 5
+                    resultImage = dr.findDrusens(thresholdValue=thresholdValue)
+                    resultImage = methods.resizeImage(resultImage,500,500)
+                    pathToSave = 'static/Temp/Armd_Edited_' + str(uuid.uuid4()) + '_' + selectedFile.name
+                    methods.saveImageToFile(pathToSave, resultImage)
+                    return render(request, 'Armd.html', {
+                        'uploaded_file_url': myfile, 'edited_file_url': pathToSave, 'post': post_armd
+                    })
+        except BaseException as e:
+            print(str(e))
+            pass
+    return render(request, 'Armd.html', {'post': post_armd})
+
+#endregion
 
 #region LoginRegion
 from django.contrib.auth.decorators import user_passes_test

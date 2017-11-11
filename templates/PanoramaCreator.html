@@ -28,7 +28,7 @@
             for (var i = 0; i < file.files.length; i++) {
                 var file = file.files[i];
                 var ext = file.name.match(/\.([^\.]+)$/)[1];
-                switch (ext) {
+                switch (ext.toLowerCase()) {
                     case 'jpg':
                     case 'jpeg':
                     case 'png':

@@ -168,3 +168,32 @@ def pickleYukle(fileName,method=None):
     elif method == 1:
         data =joblib.load(fileName)
     return data
+
+
+def resizeImage(image,newWidth,newHeight):
+    try:
+        if len(image.shape)==2:
+            height, width = image.shape
+        else:
+            height, width,channels = image.shape
+        oranHeight, oranWidth = 1, 1
+        if height > newHeight:
+            oranHeight = height / newHeight
+        if width > newWidth:
+            oranWidth = width / newWidth
+        height = height / oranHeight
+        width = width / oranWidth
+        imageReturn = image.copy()
+        imageReturn = cv2.resize(imageReturn, (int(width), int(height)), interpolation=cv2.INTER_CUBIC)
+        return imageReturn
+    except:
+        return image
+
+
+
+def intTryParse(value):
+    try:
+        return int(value), True
+    except ValueError:
+        return value, False
+
